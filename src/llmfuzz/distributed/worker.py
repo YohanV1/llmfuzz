@@ -1,4 +1,4 @@
-"""Distributed fuzzing worker — pulls tasks from Redis, runs agent loop."""
+"""Distributed fuzzing worker - pulls tasks from Redis, runs agent loop."""
 
 from __future__ import annotations
 
@@ -41,7 +41,7 @@ class FuzzWorker:
         self._running = True
 
     async def run(self) -> None:
-        """Main worker loop — pull tasks, fuzz, report results."""
+        """Main worker loop - pull tasks, fuzz, report results."""
         await self.task_consumer.ensure_group()
         print(f"[{self.worker_id}] Worker started, waiting for tasks...")
 

@@ -1,4 +1,4 @@
-"""Distributed fuzzing coordinator — assigns targets, aggregates results."""
+"""Distributed fuzzing coordinator - assigns targets, aggregates results."""
 
 from __future__ import annotations
 
@@ -73,7 +73,7 @@ class FuzzCoordinator:
         self.global_coverage[result.target_id] = result.final_coverage
 
         console.print(
-            f"[green]Completed:[/green] task {result.task_id[:12]} by {result.worker_id} — "
+            f"[green]Completed:[/green] task {result.task_id[:12]} by {result.worker_id} - "
             f"{result.final_coverage.branch_coverage_pct:.1f}% branch coverage, "
             f"{len(result.crashes)} crashes, "
             f"{result.total_duration_s:.1f}s"

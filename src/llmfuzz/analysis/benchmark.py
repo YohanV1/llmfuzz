@@ -1,4 +1,4 @@
-"""Benchmark runner — compares LLM-guided vs random fuzzing."""
+"""Benchmark runner - compares LLM-guided vs random fuzzing."""
 
 from __future__ import annotations
 

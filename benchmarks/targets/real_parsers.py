@@ -8,7 +8,7 @@ from urllib.parse import unquote_plus
 
 
 # --------------------------------------------------------------------------
-# From urllib.parse — query string parser
+# From urllib.parse - query string parser
 # --------------------------------------------------------------------------
 
 def parse_query_string(
@@ -65,7 +65,7 @@ def parse_query_string(
 
 
 # --------------------------------------------------------------------------
-# From email._parseaddr — email address parser (core logic)
+# From email._parseaddr - email address parser (core logic)
 # --------------------------------------------------------------------------
 
 import email.utils
@@ -99,7 +99,7 @@ def parse_email(address: str) -> tuple[str, str]:
 
 
 # --------------------------------------------------------------------------
-# Shell command tokenizer — reimplemented from shlex
+# Shell command tokenizer - reimplemented from shlex
 # --------------------------------------------------------------------------
 
 def tokenize_command(s: str) -> list[str]:
@@ -166,7 +166,7 @@ def tokenize_command(s: str) -> list[str]:
         # Handle shell special characters
         if not in_single_quote and not in_double_quote:
             if char == "#":
-                # Comment — ignore rest of line
+                # Comment - ignore rest of line
                 break
             if char in ("|", ";", "&"):
                 if current_token:

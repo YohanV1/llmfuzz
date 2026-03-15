@@ -1,4 +1,4 @@
-"""JSON expression evaluator — a complex target with deep branching.
+"""JSON expression evaluator - a complex target with deep branching.
 
 This implements a mini expression language over JSON-like values,
 with enough branch complexity to stress the LLM's reasoning.

@@ -2,7 +2,7 @@
 
 
 def process_data(data: list, chunk_size: int = 10) -> list:
-    """Process data in chunks — has several bugs."""
+    """Process data in chunks - has several bugs."""
     if not data:
         return []
 
@@ -31,7 +31,7 @@ def process_data(data: list, chunk_size: int = 10) -> list:
 
 
 def validate_email(email: str) -> bool:
-    """Validate an email address — has edge case bugs."""
+    """Validate an email address - has edge case bugs."""
     if not email or not isinstance(email, str):
         return False
 

@@ -1,4 +1,4 @@
-"""Core agent loop — orchestrates the analyze/generate/execute/reflect cycle."""
+"""Core agent loop - orchestrates the analyze/generate/execute/reflect cycle."""
 
 from __future__ import annotations
 
@@ -103,7 +103,7 @@ async def run_agent_loop(
         inputs = await _call_llm(client, model, prompt, target.target_id, strategy.value)
 
         if not inputs:
-            # LLM returned no inputs — try once more with explicit instruction
+            # LLM returned no inputs - try once more with explicit instruction
             inputs = await _call_llm(
                 client, model,
                 prompt + "\n\nYou MUST generate at least 1 test input. Try harder.",

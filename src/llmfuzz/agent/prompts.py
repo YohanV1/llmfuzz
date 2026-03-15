@@ -174,7 +174,7 @@ def _get_strategy_instructions(strategy: str) -> str:
         ),
         "mutation": (
             "Take the most successful previous inputs (those that covered new branches) "
-            "and mutate them slightly — change one argument at a time, negate values, "
+            "and mutate them slightly - change one argument at a time, negate values, "
             "swap types, add/remove elements from collections."
         ),
     }

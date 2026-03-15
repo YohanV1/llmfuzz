@@ -34,7 +34,7 @@ class SandboxExecutor:
         project_root = self._find_project_root(target.source_file)
 
         # Figure out the simple function name for the harness
-        # qualified_name might be "module.ClassName.method" — we need "ClassName.method"
+        # qualified_name might be "module.ClassName.method" - we need "ClassName.method"
         qualified = target.qualified_name
         module_prefix = target.module_path + "."
         if qualified.startswith(module_prefix):
@@ -107,7 +107,7 @@ class SandboxExecutor:
                 duration_ms=result_data.get("duration_ms", duration_ms),
             )
 
-        # No result marker — process crashed
+        # No result marker - process crashed
         return ExecutionResult(
             input_id=test_input.input_id,
             target_id=target.target_id,

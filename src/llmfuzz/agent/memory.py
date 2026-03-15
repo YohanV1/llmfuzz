@@ -1,4 +1,4 @@
-"""Agent memory — tracks what has been tried, what worked, what didn't."""
+"""Agent memory - tracks what has been tried, what worked, what didn't."""
 
 from __future__ import annotations
 

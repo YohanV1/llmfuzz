@@ -128,7 +128,7 @@ def _print_session_summary(session) -> None:
     console.print(f"  Crashes found:         {len(session.crashes)}")
 
     if session.plateau_detected:
-        console.print("  [yellow]Coverage plateau detected — stopped early[/yellow]")
+        console.print("  [yellow]Coverage plateau detected - stopped early[/yellow]")
 
     if session.crashes:
         console.print("\n[bold red]Crashes:[/bold red]")

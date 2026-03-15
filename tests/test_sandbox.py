@@ -48,7 +48,7 @@ async def test_timeout_handling(simple_math_path):
     with tempfile.TemporaryDirectory() as cov_dir:
         result = await sandbox.execute(target, inp, cov_dir)
 
-    # Either succeeds quickly or times out — both are valid
+    # Either succeeds quickly or times out - both are valid
     assert result.outcome in (ExecutionOutcome.SUCCESS, ExecutionOutcome.TIMEOUT)
 
 

@@ -56,7 +56,7 @@ class CoverageAnalyzer:
 
         # Also add branch-specific gaps from coverage data
         for from_line, to_line in sorted(self.collector.cumulative_branches):
-            # These are branches that WERE hit — we want the ones NOT hit
+            # These are branches that WERE hit - we want the ones NOT hit
             pass
 
         # Deduplicate and prioritize branch points (if/elif/else, try/except)
@@ -79,7 +79,7 @@ class CoverageAnalyzer:
         for i, gap in enumerate(gaps, 1):
             section = f"### Gap {i}: Line {gap.branch.from_line}"
             if gap.condition_text:
-                section += f" — Condition: `{gap.condition_text}`"
+                section += f" - Condition: `{gap.condition_text}`"
             section += f"\n```python\n{gap.surrounding_source}\n```"
             sections.append(section)
 

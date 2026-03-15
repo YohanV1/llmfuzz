@@ -2,7 +2,7 @@
 
 These are thin wrappers around real stdlib functions so the fuzzer
 can point at this file and discover them. The actual implementation
-lives in the stdlib — coverage.py instruments the stdlib source.
+lives in the stdlib - coverage.py instruments the stdlib source.
 """
 
 import shlex

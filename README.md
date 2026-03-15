@@ -1,6 +1,6 @@
 # llmfuzz
 
-LLM-driven fuzzing agent that reads source code, reasons about branch coverage gaps, and generates targeted test inputs — not randomly, but by understanding what code paths haven't been hit yet.
+LLM-driven fuzzing agent that reads source code, reasons about branch coverage gaps, and generates targeted test inputs - not randomly, but by understanding what code paths haven't been hit yet.
 
 ## Why this exists
 
@@ -125,10 +125,10 @@ Submitted: real_parsers.parse_email (task 601f63b2)
 Submitted: real_parsers.tokenize_command (task 2c00f2c4)
 Submitted: real_parsers.parse_content_type (task fd0744fa)
 
-Completed: parse_email by worker-2 — 90.9% branch coverage, 1 crash, 161.9s
-Completed: tokenize_command by worker-2 — 98.3% branch coverage, 4 crashes, 268.3s
-Completed: parse_query_string by worker-1 — 95.8% branch coverage, 3 crashes, 473.0s
-Completed: parse_content_type by worker-2 — 96.2% branch coverage, 0 crashes, 100.6s
+Completed: parse_email by worker-2 - 90.9% branch coverage, 1 crash, 161.9s
+Completed: tokenize_command by worker-2 - 98.3% branch coverage, 4 crashes, 268.3s
+Completed: parse_query_string by worker-1 - 95.8% branch coverage, 3 crashes, 473.0s
+Completed: parse_content_type by worker-2 - 96.2% branch coverage, 0 crashes, 100.6s
 ```
 
 ## Architecture
@@ -186,7 +186,7 @@ On iteration 0, Claude sees the raw source code and generates diverse inputs. On
 ```
 Current coverage: 92.3% branches (24/26)
 Uncovered branches:
-  Line 128: char in ('"', '\\', '$', '`', '\n') — FALSE branch
+  Line 128: char in ('"', '\\', '$', '`', '\n') - FALSE branch
     Context: Inside double-quote escape handling
   Line 207: escape_next is True at end of string
     Context: Trailing backslash with no following character
@@ -194,17 +194,17 @@ Uncovered branches:
 Generate inputs that will reach these specific uncovered paths.
 ```
 
-Claude then crafts targeted inputs like `'echo "test \\"nested\\" quote"'` or `'trailing\\'` — inputs that require understanding the tokenizer's state machine to construct.
+Claude then crafts targeted inputs like `'echo "test \\"nested\\" quote"'` or `'trailing\\'` - inputs that require understanding the tokenizer's state machine to construct.
 
 ## Tech stack
 
-- **Claude** (via Anthropic SDK) — code reasoning and input generation
-- **coverage.py** — branch-level coverage instrumentation
-- **Redis Streams** — distributed task queue with consumer groups
-- **SQLite** — session and crash persistence
-- **Typer + Rich** — CLI with live progress output
-- **Pydantic** — type-safe data models
-- **Matplotlib** — benchmark visualization
+- **Claude** (via Anthropic SDK) - code reasoning and input generation
+- **coverage.py** - branch-level coverage instrumentation
+- **Redis Streams** - distributed task queue with consumer groups
+- **SQLite** - session and crash persistence
+- **Typer + Rich** - CLI with live progress output
+- **Pydantic** - type-safe data models
+- **Matplotlib** - benchmark visualization
 
 ## License
 
