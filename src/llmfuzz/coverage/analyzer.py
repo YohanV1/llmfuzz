@@ -19,9 +19,9 @@ class CoverageAnalyzer:
             self._source_lines = self.target.signature.source_code.splitlines()
         return self._source_lines
 
-    def find_uncovered_lines(self) -> list[CoverageGap]:
+    def find_uncovered_lines(self, iteration: int = 0) -> list[CoverageGap]:
         """Find uncovered executable lines and return with source context."""
-        snapshot = self.collector.get_snapshot(iteration=0)
+        snapshot = self.collector.get_snapshot(iteration)
         gaps: list[CoverageGap] = []
 
         for line_num in sorted(snapshot.missing_lines):
@@ -50,14 +50,49 @@ class CoverageAnalyzer:
 
         return gaps
 
-    def find_coverage_gaps(self) -> list[CoverageGap]:
+    def find_coverage_gaps(self, iteration: int = 0) -> list[CoverageGap]:
         """Find uncovered branches and lines, return with source context for the LLM."""
-        gaps = self.find_uncovered_lines()
+        gaps = self.find_uncovered_lines(iteration)
 
-        # Also add branch-specific gaps from coverage data
-        for from_line, to_line in sorted(self.collector.cumulative_branches):
-            # These are branches that WERE hit - we want the ones NOT hit
-            pass
+        # Add branch-specific gaps: arcs (from_line, to_line) not yet hit
+        snapshot = self.collector.get_snapshot(iteration)
+        covered_lines_in_gaps = {g.branch.from_line for g in gaps}
+
+        for from_line, to_line in sorted(snapshot.missing_branches):
+            # Skip if we already have a line gap covering this origin
+            if from_line in covered_lines_in_gaps:
+                continue
+
+            rel_line = from_line - self.target.signature.start_line
+            if rel_line < 0 or rel_line >= len(self.source_lines):
+                continue
+
+            line_text = self.source_lines[rel_line].strip()
+            surrounding = self._get_context(rel_line, window=5)
+            condition = self._extract_condition(rel_line)
+
+            # Describe the specific branch arm that's missed
+            if to_line > from_line:
+                why = f"Branch from line {from_line} → {to_line} never taken"
+            elif to_line < 0:
+                # Negative to_line in coverage.py means exit from function/block
+                why = f"Branch from line {from_line} → exit never taken"
+            else:
+                why = f"Branch arc ({from_line}, {to_line}) never taken"
+
+            gaps.append(CoverageGap(
+                branch=BranchInfo(
+                    source_file=self.target.source_file,
+                    from_line=from_line,
+                    to_line=to_line,
+                    hit=False,
+                    source_text=line_text,
+                ),
+                surrounding_source=surrounding,
+                condition_text=condition,
+                why_hard=why,
+            ))
+            covered_lines_in_gaps.add(from_line)
 
         # Deduplicate and prioritize branch points (if/elif/else, try/except)
         seen_lines: set[int] = set()
@@ -69,9 +104,9 @@ class CoverageAnalyzer:
 
         return unique_gaps
 
-    def format_gaps_for_prompt(self, max_gaps: int = 10) -> str:
+    def format_gaps_for_prompt(self, max_gaps: int = 10, iteration: int = 0) -> str:
         """Format coverage gaps as text for the LLM prompt."""
-        gaps = self.find_coverage_gaps()[:max_gaps]
+        gaps = self.find_coverage_gaps(iteration)[:max_gaps]
         if not gaps:
             return "All branches covered!"
 
@@ -80,6 +115,8 @@ class CoverageAnalyzer:
             section = f"### Gap {i}: Line {gap.branch.from_line}"
             if gap.condition_text:
                 section += f" - Condition: `{gap.condition_text}`"
+            if gap.why_hard:
+                section += f"\n> {gap.why_hard}"
             section += f"\n```python\n{gap.surrounding_source}\n```"
             sections.append(section)
 

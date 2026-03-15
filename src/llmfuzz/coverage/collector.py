@@ -36,7 +36,36 @@ class CoverageCollector:
         raw_arcs = data.arcs(source_file) or []
         branches = {(a, b) for a, b in raw_arcs if start <= a <= end}
 
+        # Also discover all possible arcs to track missing branches
+        if self._all_branches is not None and not self._all_branches:
+            self._discover_all_arcs(data_file)
+
         return lines, branches
+
+    def _discover_all_arcs(self, data_file: str) -> None:
+        """Use coverage.py branch analysis to discover all possible arcs."""
+        try:
+            cov = coverage_lib.Coverage(
+                data_file=data_file,
+                branch=True,
+            )
+            cov.load()
+            analysis = cov._analyze(self.target.source_file)
+            start = self.target.signature.start_line
+            end = self.target.signature.end_line
+
+            # coverage.py FileAnalysis has .missing_branch_arcs() for uncovered
+            # and the arc data for all possible arcs
+            if hasattr(analysis, 'arcs'):
+                all_arcs = {
+                    (a, b) for a, b in (analysis.arcs() or [])
+                    if start <= a <= end
+                }
+                if all_arcs:
+                    self._all_branches = all_arcs
+                    self._total_branches = len(all_arcs)
+        except Exception:
+            pass  # Fall back to AST-based estimate
 
     def merge_and_compute_new(
         self, lines: set[int], branches: set[tuple[int, int]]
@@ -134,6 +163,7 @@ class CoverageCollector:
             total_branches = len(self.cumulative_branches) + 2  # assume a few more uncovered
 
         missing_lines = (self._all_lines or set()) - self.cumulative_lines
+        missing_branches = (self._all_branches or set()) - self.cumulative_branches
 
         return CoverageSnapshot(
             target_id=self.target.target_id,
@@ -145,5 +175,5 @@ class CoverageCollector:
             covered_lines=set(self.cumulative_lines),
             covered_branches=set(self.cumulative_branches),
             missing_lines=missing_lines,
-            missing_branches=set(),  # Populated by analyzer
+            missing_branches=missing_branches,
         )

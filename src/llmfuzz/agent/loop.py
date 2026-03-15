@@ -75,7 +75,7 @@ async def run_agent_loop(
             )
         else:
             snapshot = collector.get_snapshot(iteration)
-            gaps_text = analyzer.format_gaps_for_prompt(max_gaps=10)
+            gaps_text = analyzer.format_gaps_for_prompt(max_gaps=10, iteration=iteration)
             memory_summary = memory.summarize_for_prompt()
 
             prompt = build_coverage_guided_prompt(
