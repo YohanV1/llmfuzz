@@ -65,8 +65,11 @@ class SandboxExecutor:
                 proc.communicate(), timeout=self.timeout_s
             )
             duration_ms = (time.perf_counter() - start) * 1000
-        except asyncio.TimeoutError:
-            proc.kill()
+        except (asyncio.TimeoutError, TimeoutError):
+            try:
+                proc.kill()
+            except ProcessLookupError:
+                pass
             await proc.wait()
             duration_ms = (time.perf_counter() - start) * 1000
             return ExecutionResult(
